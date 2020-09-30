@@ -19,6 +19,19 @@ class HolidaySearchRepository extends ServiceEntityRepository
         parent::__construct($registry, HolidaySearch::class);
     }
 
+    public function findByYearAndCountry($country, $year)
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.country = :country')
+            ->setParameter('country', $country)
+            ->andWhere('h.year = :year')
+            ->setParameter('year', $year)
+            ->orderBy('h.holidayDate', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return HolidaySearch[] Returns an array of HolidaySearch objects
     //  */

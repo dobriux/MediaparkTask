@@ -18,37 +18,13 @@ class FetchHolidaysData
 {
     private $client;
     private $dataUrl;
-    private $country;
-    private $region;
     private $holidayType;
 
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
         $this->dataUrl = "https://kayaposoft.com/enrico/json/v2.0";
-        $this->region = "bw";
-        $this->country = "lt";
-        $this->holidayType = "all";
-    }
-
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    public function setCountry($country): void
-    {
-        $this->country = $country;
-    }
-
-    public function getRegion()
-    {
-        return $this->region;
-    }
-
-    public function setRegion($region): void
-    {
-        $this->region = $region;
+        $this->holidayType = "public_holiday";
     }
 
     public function getHolidayType()
@@ -61,50 +37,50 @@ class FetchHolidaysData
         $this->holidayType = $holidayType;
     }
 
-    public function getHolidaysForMonth(int $month, int $year) : array
+    public function getHolidaysForMonth(int $month, int $year, string $country = 'lt', string $region = 'bw') : array
     {
         return $this->fetch("getHolidaysForMonth",[
             'month' => $month,
             'year' => $year,
-            'region' => $this->getRegion(),
-            'country' => $this->getCountry(),
+            'region' => $region,
+            'country' => $country,
             'holidayType' => $this->getHolidayType()
         ]);
     }
 
-    public function getHolidaysForYear(int $year) : array
+    public function getHolidaysForYear(int $year, string $country = 'lt') : array
     {
         return $this->fetch("getHolidaysForYear",[
             'year' => $year,
-            'country' => $this->getCountry(),
+            'country' => $country,
             'holidayType' => $this->getHolidayType()
         ]);
     }
 
-    public function getHolidaysForDateRange(DateTime $fromDate, DateTime $toDate) : array
+    public function getHolidaysForDateRange(DateTime $fromDate, DateTime $toDate, string $country = 'lt', string $region = 'bw') : array
     {
         return $this->fetch("getHolidaysForDateRange",[
             'fromDate' => $fromDate->format('d-m-Y'),
             'toDate' => $toDate->format('d-m-Y'),
-            'region' => $this->getRegion(),
-            'country' => $this->getCountry(),
+            'region' => $region,
+            'country' => $country,
             'holidayType' => $this->getHolidayType()
         ]);
     }
 
-    public function isPublicHoliday(DateTime $date) : array
+    public function isPublicHoliday(DateTime $date, string $country = 'lt') : array
     {
         return $this->fetch("isPublicHoliday",[
             'date' => $date->format('d-m-Y'),
-            'country' => $this->getCountry(),
+            'country' => $country,
         ]);
     }
 
-    public function isWorkDay(DateTime $date) : array
+    public function isWorkDay(DateTime $date, string $country = 'lt') : array
     {
         return $this->fetch("isWorkDay",[
             'date' => $date->format('d-m-Y'),
-            'country' => $this->getCountry(),
+            'country' => $country,
         ]);
     }
 
@@ -134,7 +110,6 @@ class FetchHolidaysData
         $parameters['action'] = $action;
 
         try{
-
             $response = $this->client->request(
                 'GET',
                 $this->dataUrl,[

@@ -6,8 +6,14 @@
         <div class="row">
             <div class="col-12 text-center">
                 <h3>Country holidays</h3>
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </div>
-            <div class="col-8">
+
+            <div class="col-12">
                 {{ form_start(searchForm, {'attr': {'class': 'form-inline mt-5'}}) }}
                     <div class="form-group mb-2">
                         {{ form_widget(searchForm.country, {'attr': {'class': 'form-control'}}) }}
@@ -18,7 +24,36 @@
                 {{ form_widget(searchForm.search, {'attr': {'class': 'btn btn-primary mb-2'}}) }}
                 {{ form_end(searchForm) }}
             </div>
-
         </div>
+        <div class="row">
+            <div class="col">
+                <span style="color:#ff0000;">
+                {{ form_errors(searchForm.year) }}
+                {{ form_errors(searchForm.country) }}
+                    </span>
+            </div>
+        </div>
+        {% if holidayFromDatabase is defined %}
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Holiday</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    {% for data in holidayFromDatabase %}
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>{{ data.holidayName }}</td>
+                        <td>{{ data.holidayName }}</td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 {% endblock %}
