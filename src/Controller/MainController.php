@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\HolidaySearchType;
 use App\Service\FetchHolidaysData;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,9 +18,12 @@ class MainController extends AbstractController
      */
     public function index(FetchHolidaysData $fetchHolidaysData)
     {
+        $supportedCountries = $fetchHolidaysData->getSupportedCountries();
+        $searchForm = $this->createForm(HolidaySearchType::class);
 
         return $this->render('main/index.html.twig', [
-            'controller_name' => 'MainController',
+            'supportedCountries' => $supportedCountries,
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 }

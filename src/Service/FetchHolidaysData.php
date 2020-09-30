@@ -5,6 +5,7 @@ namespace App\Service;
 
 
 use DateTime;
+use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -117,6 +118,15 @@ class FetchHolidaysData
         return $this->fetch("whereIsPublicHoliday",[
             'date' => $date->format('d-m-Y'),
         ]);
+    }
+
+    public function getSupportedCountriesArray() : array
+    {
+        $countries = null;
+        foreach ($this->getSupportedCountries() as $supportedCountries){
+            $countries[$supportedCountries['fullName']] = $supportedCountries['countryCode'];
+        }
+        return $countries;
     }
 
     private function fetch(string $action ,array $parameters = NULL): array
