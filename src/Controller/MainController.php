@@ -53,9 +53,17 @@ class MainController extends AbstractController
                 $holidayEntity = new HolidaySearch();
                 $holidayEntity->setYear($singleHoliday['date']['year']);
                 $holidayEntity->setCountry($formData->getCountry());
-                $holidayEntity->setHolidayName($singleHoliday['name'][1]['text']);
+
+                $langEn = null;
+                foreach ($singleHoliday['name'] as $name){
+                    if($name['lang'] == 'en'){
+                        $langEn = $name;
+                        break;
+                    }
+                }
+                $holidayEntity->setHolidayName($langEn['text']);
                 $holidayEntity->setHolidayDate(new DateTime($singleHoliday['date']['day'].'-'.$singleHoliday['date']['month'].'-'.$singleHoliday['date']['year']));
-                $status = $fetchHolidaysData->isWorkDay(new DateTime($singleHoliday['date']['day'].'-'.$singleHoliday['date']['month'].'-'.$singleHoliday['date']['year']));
+                $status = $fetchHolidaysData->isWorkDay(new DateTime($singleHoliday['date']['day'].'-'.$singleHoliday['date']['month'].'-'.$singleHoliday['date']['year']), $formData->getCountry());
 
                 if(isset($status["error"])){
                     $this->addFlash('error', $status["error"]);
@@ -64,7 +72,7 @@ class MainController extends AbstractController
                     ]);
                 }
 
-                if($status){
+                if($status["isWorkDay"]){
                     $holidayEntity->setHolidayStatus('Work Day');
                 }else{
                     $holidayEntity->setHolidayStatus('Free Day');

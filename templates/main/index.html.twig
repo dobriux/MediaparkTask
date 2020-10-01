@@ -34,26 +34,43 @@
             </div>
         </div>
         {% if holidayFromDatabase is defined %}
+            {% if holidayFromDatabase | length == 0 %}
+                <h4>No Holidays for this combination</h4>
+            {% else %}
+            <h4>Total amount: {{ holidayFromDatabase | length }}</h4>
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">#</th>
                     <th scope="col">Holiday</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Date</th>
                 </tr>
                 </thead>
-                <tbody>
-
+                <tr>
+                {% set month = null %}
+                    {% set freeDays = 0 %}
                     {% for data in holidayFromDatabase %}
+                        {% if month != data.holidayDate| date("F")  %}
+                            {% set month = data.holidayDate | date("F")  %}
+                <tr class="table-active">
+                    <td scope="col"></td>
+                    <td scope="col"></td>
+                    <td scope="col">{{ month }}</td>
+                </tr>
+                        {% endif %}
                     <tr>
-                        <th scope="row">1</th>
-                        <td>{{ data.holidayName }}</td>
-                        <td>{{ data.holidayName }}</td>
+                        <th scope="row">{{ data.holidayName }}</th>
+                        <td>{{ data.holidayStatus }}</td>
+                        <td>{{ data.holidayDate|date("d/m/Y") }}</td>
                     </tr>
+                {% if  data.holidayStatus == "Free Day" %}
+                     {% set freeDays = freeDays+1 %}
+                {% endif %}
                     {% endfor %}
-
                 </tbody>
             </table>
+            <h4>Total free days: {{ freeDays }}</h4>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}
