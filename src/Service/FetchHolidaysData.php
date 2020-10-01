@@ -5,7 +5,6 @@ namespace App\Service;
 
 
 use DateTime;
-use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -24,7 +23,7 @@ class FetchHolidaysData
     {
         $this->client = $client;
         $this->dataUrl = "https://kayaposoft.com/enrico/json/v2.0";
-        $this->holidayType = "public_holiday";
+        $this->holidayType = "all";
     }
 
     public function getHolidayType()

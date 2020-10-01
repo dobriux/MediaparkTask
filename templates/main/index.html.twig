@@ -63,7 +63,7 @@
                         <td>{{ data.holidayStatus }}</td>
                         <td>{{ data.holidayDate|date("d/m/Y") }}</td>
                     </tr>
-                {% if  data.holidayStatus == "Free Day" %}
+                {% if  data.holidayStatus == "Free Day" or  data.holidayStatus == "Holiday" %}
                      {% set freeDays = freeDays+1 %}
                 {% endif %}
                     {% endfor %}
