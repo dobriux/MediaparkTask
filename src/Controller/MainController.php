@@ -26,7 +26,6 @@ class MainController extends AbstractController
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $formData = $searchForm->getData();
-
             $holidaySearchRepository = $this->getDoctrine()->getRepository(HolidaySearch::class);
             $holidayFromDatabase = $holidaySearchRepository ->findByYearAndCountry($formData->getCountry(), $formData->getYear());
 
@@ -45,9 +44,7 @@ class MainController extends AbstractController
                     'searchForm' => $searchForm->createView(),
                 ]);
             }
-
             $searchService->searchResultsToDatabase($holidayData ,$formData->getCountry());
-
             $holidayFromDatabase = $holidaySearchRepository ->findByYearAndCountry($formData->getCountry(), $formData->getYear());
 
             return $this->render('main/index.html.twig', [
